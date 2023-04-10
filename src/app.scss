@@ -1,0 +1,10 @@
+@use '@neuekit/reboot';
+@use 'library/prepend' as *;
+@use 'sass-mq/mq' as *;
+
+@media (prefers-color-scheme: dark) {
+   html {
+      background-color: black;
+      color: white;
+   }
+}

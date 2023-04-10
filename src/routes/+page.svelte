@@ -1,60 +1,46 @@
 <script>
-   import { sortFn, colord } from '$lib/sort'
+   import { sortFn, colord } from '$library/sort'
+   import { copy } from '$library/copy'
    import { fly } from 'svelte/transition'
 
-   let url = 'https://cdn.statically.io/gh/mdn/data/38bc01a942de230a513963f643c51eb22827e738/css/syntaxes.json'
+   export let data
+
    let copied = false
-
-   async function getColours() {
-      const {
-         'named-color': { syntax: colours }
-      } = await fetch(url).then(r => r.json())
-
-      return colours.split(' | ')
-   }
-
-   async function copy(text) {
-      copied = false
-      try {
-         await navigator.clipboard.writeText(text)
-         copied = true
-         setTimeout(() => (copied = false), 1000)
-      } catch (err) {
-         console.error('Failed to copy: ', err)
-      }
-   }
 </script>
 
-<h1>Named Colours</h1>
-
-{#await getColours() then colours}
-   <section>
-      {#each colours.sort(sortFn) as colour}
-         {@const hsl = colord(colour).toHslString()}
-         <div style:background-color={colour}>
-            <button on:click={() => copy(colour)}>{colour}</button>
-            <button on:click={() => copy(hsl)}>{hsl}</button>
-         </div>
-      {/each}
-   </section>
-{/await}
+<section class="section">
+   <h1 class="title"><span>Named Colours</span> <span>{data.colours.length}</span></h1>
+   {#each data.colours.sort(sortFn) as colour}
+      {@const hsl = colord(colour).toHslString()}
+      {@const dark = colord(colour).isDark()}
+      <div class="item" style:background-color={colour}>
+         <button class="button" class:dark on:click={() => copy(colour)}>{colour}</button>
+         <button class="button" class:dark on:click={() => copy(hsl)}>{hsl}</button>
+      </div>
+   {/each}
+</section>
 
 {#if copied}
-   <figure in:fly={{ y: 50 }} out:fly={{ y: -50 }}>Copied!</figure>
+   <div class="notice" in:fly={{ y: 50 }} out:fly={{ y: -50 }}>Copied!</div>
 {/if}
 
-<style>
-   :global(body) {
-      margin: 0;
-      padding: 2rem;
-   }
+<style lang="scss">
+   .section {
+      @extend %wrap;
 
-   section {
       display: grid;
       gap: 1rem;
+      padding-bottom: 2rem;
+      padding-top: 2rem;
    }
 
-   div {
+   .title {
+      display: flex;
+      justify-content: space-between;
+      margin: 0;
+   }
+
+   .item {
       border-radius: 10px;
       box-shadow: 0 2px 4px hsl(0 0% 0% / 0.2);
       display: flex;
@@ -62,23 +48,27 @@
       padding: 0.5rem;
    }
 
-   button {
+   .button {
       background: none;
       border: none;
       border-radius: 6px;
+      color: hsl(0 0% 0% / 0.6);
       cursor: pointer;
       margin: 0;
-      mix-blend-mode: difference;
       padding: 0.5rem 1rem;
+
+      &.dark {
+         color: hsl(0 0% 100% / 0.6);
+      }
+
+      &:hover {
+         background-color: white;
+         color: black;
+         transition: all 0.25s ease;
+      }
    }
 
-   button:hover {
-      background-color: white;
-      transition: all 0.25s ease;
-      mix-blend-mode: normal;
-   }
-
-   figure {
+   .notice {
       -webkit-backdrop-filter: blur(40px);
       backdrop-filter: blur(40px);
       background-color: hsl(0 0% 100% / 0.8);
@@ -86,7 +76,6 @@
       box-shadow: 0 10px 40px hsl(0 0% 0% / 0.2);
       font-size: 2rem;
       inset: 50% auto auto 50%;
-      margin: 0;
       padding: 1.5rem 2rem;
       position: fixed;
       transform: translate(-50%, -50%);
