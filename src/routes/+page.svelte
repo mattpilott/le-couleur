@@ -28,7 +28,7 @@
 			<button class="button" class:dark on:click={() => copy(hsl)}>{hsl}</button>
 		</div>
 	{/each}
-	<small class="small">Made by Matt 👨🏻‍💻</small>
+	<a class="small" href="https://github.com/mattpilott" target="_blank" rel="noreferrer">Made by Matt 👨🏻‍💻</a>
 </section>
 
 {#if copied}
@@ -101,6 +101,8 @@
 	}
 
 	.small {
+		color: inherit;
 		text-align: center;
+		text-decoration: none;
 	}
 </style>
