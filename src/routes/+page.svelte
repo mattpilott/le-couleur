@@ -18,11 +18,6 @@
 	}
 </script>
 
-<svelte:head>
-	<link rel="icon" href="https://fav.farm/👨‍🎨" />
-	<title>Le Couleur</title>
-</svelte:head>
-
 <section class="section">
 	<h1 class="title"><span>Le Couleur</span> <span>{data.colours.length}</span></h1>
 	{#each data.colours.sort(sortFn) as colour}
