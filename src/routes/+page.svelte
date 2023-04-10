@@ -28,6 +28,7 @@
 			<button class="button" class:dark on:click={() => copy(hsl)}>{hsl}</button>
 		</div>
 	{/each}
+	<small class="small">Made by Matt 👨🏻‍💻</small>
 </section>
 
 {#if copied}
@@ -97,5 +98,9 @@
 			border: 0.5px solid hsl(0 0% 100% / 0.2);
 			color: hsl(0 0% 100% / 0.8);
 		}
+	}
+
+	.small {
+		text-align: center;
 	}
 </style>
