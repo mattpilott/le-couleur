@@ -1,21 +1,36 @@
-<script>
-   import { page } from '$app/stores'
+<script lang="ts">
+	import { afterNavigate } from '$app/navigation'
+	import { onMount } from 'svelte'
 
-   export let id = ''
+	interface Props {
+		id?: string
+	}
 
-   $: {
-      typeof gtag !== 'undefined' && gtag('config', id, { page_path: $page.url.path })
-   }
+	let { id }: Props = $props()
+
+	function gtag(...args: Array<unknown>) {
+		window.dataLayer.push(args)
+	}
+
+	onMount(() => {
+		if (!id) return
+		window.dataLayer = window.dataLayer || []
+
+		gtag('js', new Date())
+		gtag('config', id)
+	})
+
+	afterNavigate(({ to }) => {
+		if (!id || !to) return
+		gtag('config', id, {
+			page_title: document.title,
+			page_path: to.url.pathname
+		})
+	})
 </script>
 
 <svelte:head>
-   <link rel="preconnect" href="https://www.google-analytics.com" crossorigin />
-   <script async src="https://www.googletagmanager.com/gtag/js?id={id}"></script>
-   <script>
-      window.dataLayer = window.dataLayer || []
-      function gtag() {
-         dataLayer.push(arguments)
-      }
-      gtag('js', new Date())
-   </script>
+	{#if id}
+		<script async src="https://www.googletagmanager.com/gtag/js?id={id}"></script>
+	{/if}
 </svelte:head>

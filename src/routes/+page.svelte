@@ -1,12 +1,12 @@
-<script>
+<script lang="ts">
 	import { sortFn, colord } from '$library/sort'
 	import { fly } from 'svelte/transition'
 
-	export let data
+	const { data } = $props()
 
-	let copied = false
+	let copied = $state(false)
 
-	async function copy(text) {
+	async function copy(text: string) {
 		copied = false
 		try {
 			await navigator.clipboard.writeText(text)
@@ -18,14 +18,14 @@
 	}
 </script>
 
-<section class="section">
+<section class="section contain">
 	<h1 class="title"><span>Le Couleur</span> <span>{data.colours.length}</span></h1>
-	{#each data.colours.sort(sortFn) as colour}
+	{#each data.colours.sort(sortFn) as colour (colour)}
 		{@const hsl = colord(colour).toHslString()}
 		{@const dark = colord(colour).isDark()}
 		<div class="item" style:background-color={colour}>
-			<button class="button" class:dark on:click={() => copy(colour)}>{colour}</button>
-			<button class="button" class:dark on:click={() => copy(hsl)}>{hsl}</button>
+			<button class="button" class:dark onclick={() => copy(colour)}>{colour}</button>
+			<button class="button" class:dark onclick={() => copy(hsl)}>{hsl}</button>
 		</div>
 	{/each}
 	<a class="small" href="https://github.com/mattpilott" target="_blank" rel="noreferrer">Made by Matt 👨🏻‍💻</a>
@@ -35,9 +35,8 @@
 	<div class="notice" in:fly={{ y: 50 }} out:fly={{ y: -50 }}>Copied!</div>
 {/if}
 
-<style lang="scss">
+<style lang="css">
 	.section {
-		@extend %wrap;
 
 		display: grid;
 		gap: 1rem;
