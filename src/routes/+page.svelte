@@ -1,10 +1,9 @@
 <script lang="ts">
 	import { sortFn, colord } from '$library/sort'
+	import colourList from '$library/colours.build.json'
 	import { fly } from 'svelte/transition'
 
-	const { data } = $props()
-
-	const colours = $derived([...data.colours].sort(sortFn))
+	const colours = [...colourList].sort(sortFn)
 
 	let copied = $state(false)
 
@@ -25,7 +24,7 @@
 	{#each colours as colour (colour)}
 		{@const hsl = colord(colour).toHslString()}
 		{@const dark = colord(colour).isDark()}
-		<div class="item" style:background-color={colour}>
+		<div class="item" style:--color={colour}>
 			<button class="button" class:dark onclick={() => copy(colour)}>{colour}</button>
 			<button class="button" class:dark onclick={() => copy(hsl)}>{hsl}</button>
 		</div>
@@ -52,11 +51,16 @@
 	}
 
 	.item {
-		border-radius: 10px;
-		box-shadow: 0 2px 4px hsl(0 0% 0% / 0.2);
+		background-color: var(--color);
+		box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--color) 80%, black);
+		border-radius: 100px;
 		display: flex;
 		justify-content: space-between;
 		padding: 0.5rem;
+
+		@media (prefers-color-scheme: dark) {
+			box-shadow: 0 2px 4px hsl(0 0% 0% / 0.2);
+		}
 	}
 
 	.button {

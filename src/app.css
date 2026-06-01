@@ -2,7 +2,7 @@
 
 :root {
 	/* Colors */
-	--c-black: hsl(230 50% 4%);
+	--c-black: hsl(230 5% 10%);
 
 	/* Radius */
 	--r-x: 1000px;
@@ -37,7 +37,7 @@ html {
 	scroll-behavior: smooth;
 
 	@media (prefers-color-scheme: dark) {
-		background-color: black;
+		background-color: var(--c-black);
 		color: white;
 	}
 }

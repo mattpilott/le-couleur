@@ -1,4 +1,5 @@
 import devtools_json from 'vite-plugin-devtools-json'
+import { genColours } from './gen-colours.vite'
 import { sveltekit } from '@sveltejs/kit/vite'
 import { defineConfig, createLogger } from 'vite'
 import { readFileSync, existsSync } from 'fs'
@@ -45,7 +46,7 @@ export default defineConfig({
 		'import.meta.env.version': JSON.stringify(version),
 		'import.meta.env.build': JSON.stringify(format_date('{DD}-{MM}-{YYYY}@{HH}:{mm}:{ss}'))
 	},
-	plugins: [sveltekit(), devtools_json()],
+	plugins: [genColours(), sveltekit(), devtools_json()],
 	resolve: { extensions: ['.mjs', '.js', '.ts', '.jsx', '.tsx', '.json', '.svelte'] },
 	server: {
 		proxy: {},
