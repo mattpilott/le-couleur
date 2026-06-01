@@ -4,6 +4,8 @@
 
 	const { data } = $props()
 
+	const colours = $derived([...data.colours].sort(sortFn))
+
 	let copied = $state(false)
 
 	async function copy(text: string) {
@@ -19,8 +21,8 @@
 </script>
 
 <section class="section contain">
-	<h1 class="title"><span>Le Couleur</span> <span>{data.colours.length}</span></h1>
-	{#each data.colours.sort(sortFn) as colour (colour)}
+	<h1 class="title"><span>Le Couleur</span> <span>{colours.length}</span></h1>
+	{#each colours as colour (colour)}
 		{@const hsl = colord(colour).toHslString()}
 		{@const dark = colord(colour).isDark()}
 		<div class="item" style:background-color={colour}>
@@ -37,7 +39,6 @@
 
 <style lang="css">
 	.section {
-
 		display: grid;
 		gap: 1rem;
 		padding-bottom: 2rem;

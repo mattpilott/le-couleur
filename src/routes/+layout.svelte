@@ -24,5 +24,5 @@
 	<Cookie />
 {/if} -->
 {#if !dev}
-   <Analytics id="G-2Q5J7T306V" />
+	<Analytics id="G-2Q5J7T306V" />
 {/if}

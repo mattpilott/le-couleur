@@ -1,16 +1,19 @@
-import { ENVIRONMENT } from '$env/static/private'
+import type { Handle, HandleServerError } from '@sveltejs/kit'
+import { env } from '$env/dynamic/private'
 
-export function handleError({ error }) {
+const environment = env.ENVIRONMENT ?? 'development'
+
+export const handleError: HandleServerError = ({ error }) => {
 	const err = error instanceof Error ? error : new Error('Unknown error')
 
 	return {
-		message: ENVIRONMENT !== 'production' ? err.message : 'Whoa there!',
+		message: environment !== 'production' ? err.message : 'Whoa there!',
 		code: 'code' in err && typeof err.code === 'string' ? err.code : 'UNKNOWN',
-		env: ENVIRONMENT
+		env: environment
 	}
 }
 
-export const handle = async ({ event, resolve }) => {
+export const handle: Handle = async ({ event, resolve }) => {
 	const response = await resolve(event)
 
 	response.headers.set('Cache-Control', 'no-cache')

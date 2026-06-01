@@ -6,6 +6,7 @@ declare global {
 	}
 
 	interface ImportMetaEnv {
+		readonly name: string
 		readonly version: string
 		readonly build: string
 	}

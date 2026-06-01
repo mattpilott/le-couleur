@@ -1,10 +1,9 @@
-import type { PageLoad } from './$types';
+import type { PageLoad } from './$types'
 
-export const load = (async () => {
-   const url = 'https://cdn.jsdelivr.net/npm/mdn-data/css/syntaxes.json'
+export const load = (async ({ fetch }) => {
+	const url = 'https://cdn.jsdelivr.net/npm/mdn-data/css/syntaxes.json'
 
-   // prettier-ignore
-   const { 'named-color': { syntax: colours } } = await fetch(url).then(r => r.json())
+	const { 'named-color': namedColor } = await fetch(url).then((r) => r.json())
 
-   return { colours: colours.split(' | ') }
-}) satisfies PageLoad;
+	return { colours: (namedColor.syntax as string).split(' | ') }
+}) satisfies PageLoad
